@@ -1,0 +1,13 @@
+console.log(Math);
+console.log(Math.abs(-10));
+console.log(Math.abs(-5_000_000.1));
+console.log(Math.PI);
+console.log(Math.random() * 5);
+console.log(Math.random() * 5);
+console.log(Math.random() * 5);
+console.log(Math.random() * 5);
+console.log(Math.random() * 5);
+console.log(Math.round(10.4));
+console.log(Math.round(10.9));
+console.log(Math.ceil(2.1));
+console.log(Math.floor(2.99999));
