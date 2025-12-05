@@ -120,3 +120,75 @@ function filterActiveUsers(arr: { name: string; isActive: boolean }[]) {
 }
 
 console.log(filterActiveUsers(arr));
+
+/* ----------------------------------- 11 ----------------------------------- */
+function getMax(arr: number[]) {
+  let acc = 0;
+  for (let i = 0; i < arr.length; i++) {
+    let curr = arr[i];
+
+    if (curr > acc) {
+      acc = curr;
+    }
+    {
+      acc = acc;
+    }
+  }
+  return acc;
+}
+
+console.log(getMax([3, 9, 1, 7]));
+
+/* ----------------------------------- 12 ----------------------------------- */
+function celciusToFahrenheit(nilai: number) {
+  return (nilai = nilai * 1.8 + 32);
+}
+
+console.log(celciusToFahrenheit(0));
+console.log(celciusToFahrenheit(25));
+
+/* ----------------------------------- 13 ----------------------------------- */
+function containsWord(sentence: string, word: string) {
+  let potong: string[] = sentence.split(" ");
+  let hasil: boolean = true;
+
+  for (let i = 0; i < potong.length; i++) {
+    if (potong[i] === word) {
+      hasil = true;
+      break;
+    } else {
+      hasil = false;
+    }
+  }
+  return hasil;
+}
+
+console.log(containsWord("Learning TypeScript is fun", "fun"));
+console.log(containsWord("Learning TypeScript", "Java"));
+
+/* ----------------------------------- 14 ----------------------------------- */
+function minutesToHours(minutes: number) {
+  return minutes / 60;
+}
+
+console.log(minutesToHours(90));
+
+/* ----------------------------------- 15 ----------------------------------- */
+function removeDuplicates(arr: number[]) {
+  let acc: number = 0;
+  let curr: number = 0;
+  let data: number[] = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    acc = arr[i];
+    curr = arr[i + 1];
+
+    if ((acc = curr)) {
+    } else {
+      data.push(acc);
+    }
+  }
+  return data;
+}
+
+console.log(removeDuplicates([1, 2, 2, 3, 3, 3, 4]));
