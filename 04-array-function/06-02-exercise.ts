@@ -16,6 +16,23 @@ function sumAllNumber(arr: any[]) {
 
 console.log(sumAllNumber(mixedArray));
 
+/* ------------------------------------ 2 ----------------------------------- */
+function insertWithMaxSize(maxSize: number, ...numbers: number[]) {
+  const result = [];
+
+  for (let i = 0; i < numbers.length; i++) {
+    if (result.length === maxSize) {
+      break;
+    }
+
+    result.push(numbers[i]);
+  }
+
+  return result;
+}
+
+console.log(insertWithMaxSize(5, 5, 10, 24, 3, 6, 7, 8));
+
 /* ------------------------------------ 3 ----------------------------------- */
 {
   const arr1: number[] = [1, 2, 3];
@@ -29,6 +46,30 @@ console.log(sumAllNumber(mixedArray));
   }
 
   console.log(combine(arr1, arr2));
+
+  /* ------------------------------------ 4 ----------------------------------- */
+  function findDuplicates(arr: number[]) {
+    const duplicates: number[] = [];
+
+    for (let i = 0; i < arr.length; i++) {
+      let count = 0;
+
+      //hitung berapa kali arr[i] muncul
+      for (let j = 0; j < arr.length; j++) {
+        if (arr[i] === arr[j]) {
+          count++;
+        }
+      }
+
+      if (count > 1 && !duplicates.includes(arr[i])) {
+        duplicates.push(arr[i]);
+      }
+    }
+
+    return duplicates;
+  }
+
+  console.log(findDuplicates([1, 2, 2, 2, 3, 3, 4, 5, 5]));
 }
 /* ------------------------------------ 5 ----------------------------------- */
 {
