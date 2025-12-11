@@ -77,3 +77,62 @@ function convertTitle(title: string) {
   return result;
 }
 console.log(convertTitle("Z"));
+
+/* ------------------------------------ 2 ----------------------------------- */
+function singleDigit(arr: number[]) {
+  const arr2: number[] = [];
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr[i] === arr[j]) {
+        console.log(arr);
+        console.log(arr[i]);
+        console.log(arr[j]);
+        console.log(arr);
+
+        arr.splice(j, 1) && arr.splice(i, 1);
+        console.log(arr);
+      }
+    }
+  }
+
+  return arr;
+}
+
+const arr = [1, 7, 2, 8, 3, 6, 4, 5, 6, 7, 10, 8, 10, 11];
+console.log(singleDigit(arr));
+
+/* ------------------------------------ 3 ----------------------------------- */
+function anagram(s: string, t: string) {
+  const s2 = s.split("").sort().join();
+  const t2 = t.split("").sort().join();
+
+  console.log(s2);
+  console.log(t2);
+
+  if (s2 === t2) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+const a = "anagram";
+const b = "nagaram";
+
+console.log(anagram(a, b));
+
+/* ------------------------------------ 4 ----------------------------------- */
+function climbStaircase(n: number) {
+  let arr: number = 0;
+  let curr: number = 1;
+  let next: number = 0;
+
+  for (let i = 0; i < n; i++) {
+    next = arr + curr;
+    arr = curr;
+    curr = next;
+  }
+  return curr;
+}
+
+console.log(climbStaircase(7));
