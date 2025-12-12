@@ -3,6 +3,7 @@ const objKosong = {};
 const arr2 = new Array(1, 2, 3, 4);
 
 const arrNull = [null, false, 0];
+console.log(Boolean(arrNull[0]?.[0]));
 
 type JSONValue =
   | null

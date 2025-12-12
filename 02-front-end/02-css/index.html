@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>First CSS</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+      #second-h2 {
+        color: blue;
+        font-family: monospace;
+        text-decoration: underline;
+      }
+
+      .title-h2 {
+        color: hotpink;
+        font-family: monospace;
+      }
+
+      .border {
+        border: 1px solid red;
+        font-size: 32px;
+      }
+
+      .text-shadow {
+        box-shadow: 5px -10px 0px 0px yellow;
+      }
+    </style>
+  </head>
+  <body>
+    <h2 style="color: red; font-family: monospace" class="border">
+      Welcome to CSS World
+    </h2>
+    <h2 id="second-h2">2nd Welcome to CSS World</h2>
+    <h2 id="third-h2" class="title-h2 border text-shadow">
+      3rd Welcome to CSS World
+    </h2>
+    <p style="color: greenyellow">
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis dicta
+      molestiae minus consequatur quo voluptatibus aliquid asperiores sint
+      adipisci! Nihil nisi, non quo incidunt neque beatae. Quibusdam aut
+      accusantium sint!
+    </p>
+  </body>
+</html>
+
+<!-- -------------------------- Cara Menulis CSS --------------------------- -->
+<!-- 
+1. Inline => CSS di dalam element HTML secara langsung
+2. Internal => CSS diluar element HTML tapi masih di dalam file HTML yang sama
+3. Eksternal => CSS dan HTML ada di dua file yang berbeda
+
+key: value => property
+color: red => property
+
+selector => Cara kita memilih element mana yang mau diberi style
+1. Tag name
+2. id
+3. class
+ -->
