@@ -1,3 +1,9 @@
+/* ---------------------------------- INPUT --------------------------------- */
+const fn = (x) => x * 5;
+const args = [2, 3, 8, 6, 10];
+const t = 20;
+const cancelTimesMs = 50;
+/* ------------------------------------ - ----------------------------------- */
 type JSONValue =
   | null
   | boolean
@@ -7,30 +13,14 @@ type JSONValue =
   | { [key: string]: JSONValue };
 type Fn = (...args: JSONValue[]) => void;
 
-function cancellable(fn: Fn, args: JSONValue[], t: number): Function {
-  setTimeout(() => {}, t);
+function cancellable(fn: Fn, args: JSONValue[], t: number) {
+  const cancelFn = cancellable(fn, args, t);
+  return setTimeout(cancelFn, cancelTimesMs);
 }
 
-/**
- *  const result = [];
- *
- *  const fn = (x) => x * 5;
- *  const args = [2], t = 20, cancelTimeMs = 50;
- *
- *  const start = performance.now();
- *
- *  const log = (...argsArr) => {
- *      const diff = Math.floor(performance.now() - start);
- *      result.push({"time": diff, "returned": fn(...argsArr)});
- *  }
- *
- *  const cancel = cancellable(log, args, t);
- *
- *  const maxT = Math.max(t, cancelTimeMs);
- *
- *  setTimeout(cancel, cancelTimeMs);
- *
- *  setTimeout(() => {
- *      console.log(result); // [{"time":20,"returned":10}]
- *  }, maxT + 15)
- */
+// console.log(setTimeout(fn(...args), t));
+// console.log(
+//   setTimeout((...args) => {
+//     args * 5;
+//   }, t)
+// );
