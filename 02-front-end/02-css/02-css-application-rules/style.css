@@ -1,0 +1,16 @@
+h1 {
+  color: hotpink;
+}
+
+p {
+  color: blue !important;
+  /* dont use important */
+}
+
+div > p {
+  color: red;
+}
+
+p {
+  color: greenyellow;
+}

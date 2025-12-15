@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Desktop First</title>
+    <style>
+      /* large screen */
+      h1 {
+        color: red;
+        font-size: 72px;
+        font-family: monospace;
+      }
+
+      /* medium screen */
+      @media (max-width: 740px) {
+        h1 {
+          font-size: 62px;
+          font-family: cursive;
+        }
+      }
+
+      /* small screen */
+      @media (max-width: 360px) {
+        h1 {
+          font-size: 42px;
+          font-family: sans-serif;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Hello, everybody!</h1>
+  </body>
+</html>

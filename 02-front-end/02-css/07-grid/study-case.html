@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Study Case</title>
+    <style>
+      body {
+        /* large screen */
+        display: grid;
+        height: calc(100vh - 16px);
+        grid-template-columns: 1fr 3fr 1fr;
+        grid-template-rows: 1fr 1fr 70vh 1fr;
+        /* justify-items: center;
+        align-items: center; */
+        /* gap: 16px; */
+        /* row-gap: 16px; */
+        column-gap: 16px;
+      }
+
+      header {
+        background-color: red;
+        grid-column: span 3;
+        align-self: start;
+      }
+
+      nav {
+        background: orange;
+        grid-column: span 3;
+      }
+
+      aside {
+        background: yellow;
+      }
+
+      main {
+        background-color: greenyellow;
+      }
+
+      footer {
+        background-color: crimson;
+        grid-column: span 3;
+      }
+
+      /* small screen */
+      @media (max-width: 480p) {
+        body {
+          grid-template-columns: 1fr;
+        }
+
+        header,
+        nav,
+        footer {
+          grid-column: unset;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>Header</header>
+    <nav>Nav</nav>
+
+    <aside>Side Content</aside>
+    <main>Main Content</main>
+    <aside>Side Content</aside>
+
+    <footer>Footer</footer>
+  </body>
+</html>
