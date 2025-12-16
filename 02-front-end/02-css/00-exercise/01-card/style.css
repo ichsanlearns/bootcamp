@@ -1,0 +1,114 @@
+@import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap");
+
+* {
+  border: 1px solid red;
+}
+
+body {
+  background-color: #f4d0ae;
+  font-family: "Figtree", sans-serif;
+  padding-top: 156px;
+  width: 375px;
+  height: 812px;
+  margin: auto;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+
+  height: calc(501px - 48px);
+  width: calc(327px - 48px);
+  background-color: white;
+  border: solid 1px black;
+  margin: auto;
+  border-radius: 20px;
+  box-shadow: 8px 8px 0 0;
+  justify-content: space-between;
+  padding: 24px;
+  gap: 12px;
+}
+
+.top {
+  display: block;
+  width: 279px;
+  height: 200px;
+  margin: auto;
+  border-radius: 10px;
+}
+
+.learning {
+  background: #f4d04e;
+  font-size: 12px;
+  font-style: bold;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.date {
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 150%;
+  letter-spacing: 0%;
+  margin: 0 0 0 0;
+}
+
+.description {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: 0;
+  color: grey;
+  margin-top: 12px;
+  margin-bottom: 0px;
+}
+
+footer {
+  display: flex;
+  align-items: center;
+  gap: 5.5px;
+  margin-right: auto;
+}
+
+footer p {
+  font-weight: 800;
+  line-height: 150%;
+  font-size: 14px;
+  margin-bottom: 0px;
+}
+
+@media (min-width: 760px) {
+  .card {
+    width: calc(384px - 48px);
+    height: calc(522px - 48px);
+  }
+
+  .top {
+    width: 336px;
+    height: 200px;
+  }
+
+  .learning {
+    font-size: 14px;
+  }
+
+  .date {
+    font-size: 14px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .description {
+    font-size: 16px;
+  }
+}

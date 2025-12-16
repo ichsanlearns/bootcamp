@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM</title>
+    <style>
+      * {
+        border: 1px solid red;
+      }
+      body {
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+      #circle {
+        height: 200px;
+        width: 200px;
+        background-color: hotpink;
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="circle"></div>
+
+    <script>
+      const circle = document.getElementById("circle");
+      console.log(circle);
+      circle.addEventListener("click", () => {
+        function generateRandomNumber() {
+          return Math.ceil(Math.random() * 255);
+        }
+
+        circle.style.backgroundColor = `rgb(${generateRandomNumber()}, ${generateRandomNumber()}, ${generateRandomNumber()})`;
+      });
+    </script>
+  </body>
+</html>
