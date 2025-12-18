@@ -8,7 +8,7 @@ function Home() {
         src="background.jpg"
         alt=""
       />
-      <div className="relative inset-0 mt-[-220.5px] mx-auto max-w-135 mb-13 z-0 font-josefin-sans flex flex-col gap-10">
+      <div className="relative inset-0 mt-[-220.5px] mx-auto max-w-81.75 md:max-w-135 mb-13 z-0 font-josefin-sans flex flex-col gap-10">
         <div className="flex flex-row justify-between">
           <div className="w-41.75 h-10 font-bold text-[40px] tracking-[15px] text-white my-auto">
             TODO
@@ -19,9 +19,18 @@ function Home() {
             alt=""
           />
         </div>
-        <CardList msg="Create a new todo..." color="#4D5067" />
+        <div className="text-[#4D5067] w-full h-16  bg-[#25273D] border border-[#393A4B] flex items-center cursor-pointer justify-between hover:font-bold group">
+          <div className="flex items-center">
+            <div className="w-6 h-6 border border-[#393A4B] active:bg-white rounded-xl m-5"></div>
+            <input
+              className="w-[450px] focus:outline-0 focus:text-white"
+              type="text"
+              placeholder="Create a new todo..."
+            />
+          </div>
+        </div>
         <div className="text-[#C8CBE7]">
-          <div className="text-[#4D5067] line-through w-135 h-16 rounded-t-[5px] bg-[#25273D] flex items-center cursor-pointer">
+          <div className="text-[#4D5067] line-through w-full h-16 rounded-t-[5px] bg-[#25273D] flex items-center cursor-pointer">
             <div>
               <img className="m-5" src="check.png" alt="" />
             </div>
@@ -35,11 +44,11 @@ function Home() {
             msg="Complete Todo App on Frontend Mentor"
             color="#C8CBE7"
           />
-          <div className="w-135 h-16 rounded-b-[5px] bg-[#25273D] flex items-center justify-between p-[24px]">
+          <div className="w-full h-16 rounded-b-[5px] bg-[#25273D] flex items-center justify-between p-[24px]">
             <div className="w-17.25 h-3.5 font-normal text-[14px] tracking-[-0.19px] text-[#5B5E7E]">
               5 items left
             </div>
-            <div className="flex items-center h-3.5 text-[14px] gap-[18px]">
+            <div className="flex items-center h-3.5 text-[14px] gap-[18px] hidden md:flex">
               <div className="text-[#3A7CFD] cursor-pointer hover:font-bold">
                 All
               </div>
@@ -49,6 +58,15 @@ function Home() {
             <div className="my-auto cursor-pointer hover:font-bold">
               Clear Completed
             </div>
+          </div>
+        </div>
+        <div className="w-full h-16 rounded-b-[5px] bg-[#25273D] flex items-center justify-center p-[24px]  md:hidden">
+          <div className="flex items-center h-3.5 text-[14px] gap-4.5">
+            <div className="text-[#3A7CFD] cursor-pointer hover:font-bold">
+              All
+            </div>
+            <div className="cursor-pointer hover:font-bold">Active</div>
+            <div className="cursor-pointer hover:font-bold">Completed</div>
           </div>
         </div>
         <div className="text-[#5B5E7E] m-auto">
