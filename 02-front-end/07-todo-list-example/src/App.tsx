@@ -9,11 +9,35 @@ interface ITodo {
   updatedAt: Date | null;
 }
 
+type Filters = "All" | "Completed" | "Active";
+
 function App() {
   console.log("App rendered!");
 
   const [todos, setTodos] = useState<ITodo[]>([]);
   const [newTodo, setNewTodo] = useState("");
+  const [filter, setFilter] = useState<Filters>("All");
+  const [search, setSearch] = useState("");
+
+  const filteredTodos = todos.filter((todo) => {
+    // if (filter === "Completed") return todo.isCompleted;
+    // if (filter === "Active") return !todo.isCompleted;
+    // return true;
+
+    const matchFilter =
+      filter === "All"
+        ? true
+        : filter === "Completed"
+        ? todo.isCompleted
+        : !todo.isCompleted;
+    const matchSearch = todo.description
+      .toLowerCase()
+      .includes(search.toLowerCase());
+
+    return matchFilter && matchSearch;
+  });
+
+  const filters: Filters[] = ["All", "Completed", "Active"];
 
   useEffect(() => {
     function getInitialTodo() {
@@ -49,9 +73,34 @@ function App() {
     localStorage.setItem("todos", JSON.stringify([...todos, newestTodo]));
   }
 
+  function toggleStatus(id: number) {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          isCompleted: !todo.isCompleted,
+          updatedAt: new Date(),
+        };
+      } else {
+        return todo;
+      }
+    });
+
+    setTodos(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+  }
+
   return (
     <main>
       <h1>Simple Todo List</h1>
+
+      {/* Search Todo */}
+      <input
+        type="text"
+        placeholder="Search todo..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
       {/* Add Todo */}
       <form onSubmit={(event) => handleSubmit(event)}>
@@ -72,13 +121,71 @@ function App() {
           <li>{initialTodo[1].description}</li>,
           <li>{initialTodo[2].description}</li>,
         ]} */}
-        {todos.map((todo) => (
+        {filteredTodos.map((todo) => (
           <li key={todo.id}>
-            <span>{todo.description}</span>
+            <input
+              type="checkbox"
+              checked={todo.isCompleted}
+              onChange={() => toggleStatus(todo.id)}
+            />
+            <span
+              style={{
+                textDecoration: todo.isCompleted ? "line-through" : "none",
+              }}
+            >
+              {todo.description}
+            </span>
             <button onClick={() => deleteTodo(todo.id)}>delete</button>
           </li>
         ))}
       </ul>
+
+      {/* Filter Buttons */}
+      <div>
+        {/* <button
+          onClick={() => setFilter("All")}
+          style={{
+            backgroundColor: filter === "All" ? "grey" : "black",
+            cursor: filter === "All" ? "not-allowed" : "pointer",
+          }}
+          disabled={filter === "All"}
+        >
+          All
+        </button>
+        <button
+          onClick={() => setFilter("Completed")}
+          style={{
+            backgroundColor: filter === "Completed" ? "grey" : "black",
+            cursor: filter === "Completed" ? "not-allowed" : "pointer",
+          }}
+          disabled={filter === "Completed"}
+        >
+          Completed
+        </button>
+        <button
+          onClick={() => setFilter("Active")}
+          style={{
+            backgroundColor: filter === "Active" ? "grey" : "black",
+            cursor: filter === "Active" ? "not-allowed" : "pointer",
+          }}
+          disabled={filter === "Active"}
+        >
+          Active
+        </button> */}
+
+        {filters.map((f) => (
+          <button
+            onClick={() => setFilter(f)}
+            style={{
+              backgroundColor: filter === f ? "grey" : "black",
+              cursor: filter === f ? "not-allowed" : "pointer",
+            }}
+            disabled={filter === f}
+          >
+            {f}
+          </button>
+        ))}
+      </div>
     </main>
   );
 }

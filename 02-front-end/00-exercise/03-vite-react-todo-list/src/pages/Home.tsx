@@ -5,12 +5,43 @@ import { useState, useRef } from "react";
 interface ITodo {
   name: string;
   isCompleted: boolean;
+  createdAt: Date;
 }
+
+type SortOrder = "oldest" | "newest";
+type Filters = "All" | "Active" | "Completed";
 
 export default function Home() {
   const [todos, setTodos] = useState<ITodo[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [filter, setFilter] = useState<Filters>("All");
+  const [search, setSearch] = useState("");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
+
   const itemLeft = todos.length;
+  const filters: Filters[] = ["All", "Active", "Completed"];
+
+  const filteredTodos = todos
+    .filter((todo) => {
+      const matchFilter =
+        filter === "All"
+          ? true
+          : filter === "Active"
+          ? !todo.isCompleted
+          : todo.isCompleted;
+      const matchSearch = todo.name
+        .toLowerCase()
+        .includes(search.toLowerCase());
+
+      return matchFilter && matchSearch;
+    })
+    .sort((a, b) => {
+      if (sortOrder === "oldest") {
+        return a.createdAt.getTime() - b.createdAt.getTime();
+      } else {
+        return b.createdAt.getTime() - a.createdAt.getTime();
+      }
+    });
 
   function handleAddTodo() {
     if (inputRef.current?.value) {
@@ -19,6 +50,7 @@ export default function Home() {
         {
           name: inputRef.current.value,
           isCompleted: false,
+          createdAt: new Date(),
         },
       ]);
 
@@ -26,8 +58,15 @@ export default function Home() {
     }
   }
 
+  function deleteTodo(name: string) {
+    const filteredTodo = todos.filter((todo) => todo.name !== name);
+    setTodos(filteredTodo);
+  }
+
   function clearAll() {
     setTodos([]);
+    const filteredTodo = todos.filter((todo) => todo.isCompleted !== true);
+    setTodos(filteredTodo);
   }
 
   function handleToggleTodo(todo: ITodo) {
@@ -69,8 +108,36 @@ export default function Home() {
               add todo
             </button>
           </div>
+          <div className="flex p-5 items-center bg-[#25273D] h-[64px] rounded-[5px] gap-5  mb-[24px]">
+            <span className="text-[#C8CBE7]">SEARCH: </span>
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search todo..."
+              className="focus:outline-0 text-[#C8CBE7] text-[18px] w-[500px]"
+            />
+          </div>
+
+          <div className="flex p-5 items-center bg-[#25273D] h-[64px] rounded-[5px] gap-5  mb-[24px]">
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value as SortOrder)}
+              className="text-white h-10 w-300 outline-0"
+              name="Date"
+              id=""
+            >
+              <option className="text-black" value="oldest">
+                Oldest
+              </option>
+              <option className="text-black" value="newest">
+                Newest
+              </option>
+            </select>
+          </div>
+
           <div className="flex flex-col text-[18px] rounded-[5px] mb-[49px] bg-[#25273D] text-[#C8CBE7]">
-            {todos.map((todo, index) => (
+            {filteredTodos.map((todo, index) => (
               <div
                 key={index}
                 className=" flex gap-[24px] border-b align-middle items-center h-[64px]"
@@ -101,15 +168,25 @@ export default function Home() {
                   )}
                 </button>
                 <span
-                  className={`cursor-pointer flex  justify-between group w-[400px] ${
+                  className={`cursor-pointer flex justify-between items-center group w-[400px] ${
                     todo.isCompleted ? "line-through text-[#4D5067]" : ""
                   }`}
                 >
                   {todo.name}
-                  <span className="hidden group-hover:flex text-[#4D5067] text-4xl">
+
+                  {/* <span
+                    onClick={() => deleteTodo(todo.name)}
+                    className="leading-none group-hover:relative text-[#4D5067] text-4xl"
+                    >
                     x
-                  </span>
+                    </span> */}
                 </span>
+                <button
+                  className="cursor-pointer mr-10 rounded-xl outline-1 outline-white  p-1.75"
+                  onClick={() => deleteTodo(todo.name)}
+                >
+                  delete
+                </button>
               </div>
             ))}
           </div>
@@ -120,7 +197,20 @@ export default function Home() {
                 {itemLeft} items left
               </div>
               <div className="flex items-center h-3.5 text-[14px] gap-[18px] hidden md:flex">
-                <div className="text-[#3A7CFD] cursor-pointer hover:font-bold">
+                {filters.map((f) => (
+                  <button
+                    onClick={() => setFilter(f)}
+                    style={{
+                      color: filter === f ? "white" : "#5B5E7E",
+
+                      cursor: filter === f ? "not-allowed" : "pointer",
+                    }}
+                    disabled={filter === f}
+                  >
+                    {f}
+                  </button>
+                ))}
+                {/* <div className="text-[#3A7CFD] cursor-pointer hover:font-bold">
                   All
                 </div>
                 <div className="cursor-pointer hover:font-bold hover:text-[#E3E4F1]">
@@ -128,7 +218,7 @@ export default function Home() {
                 </div>
                 <div className="cursor-pointer hover:font-bold hover:text-[#E3E4F1]">
                   Completed
-                </div>
+                </div> */}
               </div>
               <div
                 className="my-auto cursor-pointer hover:font-bold"
