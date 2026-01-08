@@ -8,6 +8,7 @@ import "./index.css";
 
 import Home from "./pages/Home";
 import Root from "./layouts/Root";
+import Register from "./pages/auth/register";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -15,6 +16,7 @@ createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route element={<Root />}>
           <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
         </Route>
       </Routes>
     </BrowserRouter>

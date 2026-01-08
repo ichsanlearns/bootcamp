@@ -1,14 +1,19 @@
 import { useState } from "react";
 
-function App() {
-  const [articleData, setArticleData] = useState({
+import { type IArticle } from "../types/articletype";
+
+function CreatePage() {
+  const [articleData, setArticleData] = useState<IArticle>({
     title: "",
     image: "",
     content: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+
+    setIsLoading(true);
 
     try {
       const response = await fetch(
@@ -28,7 +33,12 @@ function App() {
 
       setArticleData({ title: "", image: "", content: "" });
     } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
       alert("Failed to created new article. Please try again after 5 minutes");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -66,10 +76,12 @@ function App() {
             setArticleData({ ...articleData, content: event.target.value })
           }
         ></textarea>
-        <button type="submit">Create Article</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? "Saving..." : "Create Article"}
+        </button>
       </form>
     </main>
   );
 }
 
-export default App;
+export default CreatePage;
