@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "age": 70,
+    "gender": "Male"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "age": 65,
+    "gender": "Female"
+  },
+  {
+    "id": 3,
+    "name": "Robert Brown",
+    "age": 72,
+    "gender": "Male"
+  },
+  {
+    "id": 4,
+    "name": "Emily Johnson",
+    "age": 68,
+    "gender": "Female"
+  },
+  {
+    "id": 5,
+    "name": "Michael Davis",
+    "age": 75,
+    "gender": "Male"
+  },
+  {
+    "id": 6,
+    "name": "Angelina Jolie",
+    "age": 50,
+    "gender": "Female"
+  }
+]
