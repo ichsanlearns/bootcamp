@@ -36,5 +36,5 @@ Pastikan terminal sudah mengarah ke root folder project.
 
 ```
 npm i express
-npm i -d @types/express
+npm i -D @types/express
 ```
