@@ -9,7 +9,7 @@ Pastikan terminal sudah mengarah ke root folder project.
 3. `npm install -D @types/node typescript`
 4. `mkdir src`
 5. `touch src/index.ts`
-6. Edit `packaget.json` script:
+6. Edit `package.json` script:
 
 ```
 "scripts": {

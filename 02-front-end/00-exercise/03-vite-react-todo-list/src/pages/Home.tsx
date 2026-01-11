@@ -85,7 +85,7 @@ export default function Home() {
         <img
           src="background.jpg"
           alt="background-image"
-          className="absolute max-h-75 z-1 min-w-full"
+          className="absolute max-h-175 z-1 min-w-full rounded-b-2xl"
         />
         <div className="flex flex-col z-0 w-[540px] mt-17.5 z-2">
           <div className="flex justify-between items-center mb-[48px]">
