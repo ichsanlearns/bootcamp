@@ -32,4 +32,12 @@ app.post("/api/todos", async (request, response) => {
     createdAt: new Date(),
     updatedAt: null,
   };
+
+  const latestTodos = [...oldTodos, newTodo];
+
+  await fs.writeFile("data/todos.json", JSON.stringify(latestTodos, null, 2));
+
+  response.status(201).json({ message: "Added new todo", data: newTodo });
 });
+
+app.listen(PORT, () => console.info(`Server is listening on port: ${PORT}`));
