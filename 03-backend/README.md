@@ -13,7 +13,7 @@ Pastikan terminal sudah mengarah ke root folder project.
 
 ```
 "scripts": {
-    "dev": "node src/index.ts",
+    "dev": "node --watch src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
 ```
