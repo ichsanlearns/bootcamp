@@ -1,1 +1,38 @@
-[]
+[
+  {
+    "id": 1,
+    "fullName": "Gofar Hilman",
+    "age": 40,
+    "gender": "Male",
+    "isVerified": false,
+    "createdAt": "2026-01-12T03:40:39.798Z",
+    "updatedAt": null
+  },
+  {
+    "id": 2,
+    "fullName": "Putri Tanjung",
+    "age": 26,
+    "gender": "Female",
+    "isVerified": false,
+    "createdAt": "2026-01-12T03:40:54.002Z",
+    "updatedAt": null
+  },
+  {
+    "id": 3,
+    "fullName": "Rujaki",
+    "age": 17,
+    "gender": "Male",
+    "isVerified": false,
+    "createdAt": "2026-01-12T04:13:14.719Z",
+    "updatedAt": null
+  },
+  {
+    "id": 4,
+    "fullName": "Surya Insomnia",
+    "age": 39,
+    "gender": "Male",
+    "isVerified": false,
+    "createdAt": "2026-01-12T04:33:56.705Z",
+    "updatedAt": null
+  }
+]
