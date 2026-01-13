@@ -4,6 +4,8 @@ import express, {
   type NextFunction,
 } from "express";
 
+import db from "../src/configs/db.config.ts";
+
 const app = express();
 const PORT: number = 8000;
 
@@ -66,13 +68,18 @@ app.get("/tasks", async (request, response) => {
   try {
     const { completed } = request.query;
 
-    const filteredTask = tasks.filter(
-      (task) =>
-        task.completed === undefined ||
-        task.completed === (completed === "true")
+    // const filteredTask = tasks.filter(
+    //   (task) =>
+    //     task.completed === undefined ||
+    //     task.completed === (completed === "true")
+    // );
+
+    const filteredTasks = await db.query(
+      `SELECT * FROM tasks WHERE completed = $1`,
+      [completed]
     );
 
-    response.json({ message: "success", body: filteredTask });
+    response.json({ message: "success", body: filteredTasks.rows });
   } catch (err: any) {
     response.status(500).json({ error: err.message });
   }
@@ -82,17 +89,21 @@ app.get("/tasks", async (request, response) => {
 app.get("/tasks/:id", async (request, response) => {
   try {
     const { id } = request.params;
-    const task = tasks.find((task) => task.id === parseInt(id));
+    // const task = tasks.find((task) => task.id === parseInt(id));
 
-    if (!task) {
+    const filteredTasks = await db.query(`SELECT * FROM tasks WHERE id = $1`, [
+      id,
+    ]);
+
+    if (!filteredTasks) {
       response.status(400).json({ error: "Task not found" });
     }
 
     response.json({
       message: "success",
       body: {
-        id: task?.id,
-        title: task?.title,
+        id: filteredTasks.rows[0].id,
+        title: filteredTasks.rows[0].title,
       },
     });
   } catch (err: any) {
@@ -101,18 +112,20 @@ app.get("/tasks/:id", async (request, response) => {
 });
 
 // 5. Protected route (role teacher)
-app.get("/tasks/:id/details", authMiddleware, (request, response) => {
+app.get("/tasks/:id/details", authMiddleware, async (request, response) => {
   try {
     const { id } = request.params;
-    const task = tasks.find((task) => task.id === Number(id));
+    const filteredTasks = await db.query(`SELECT * FROM tasks WHERE id = $1`, [
+      id,
+    ]);
 
-    if (!task) {
+    if (!filteredTasks) {
       response.status(400).json({ error: "Task not found" });
     }
 
     response.json({
       message: "success",
-      body: task,
+      body: filteredTasks.rows,
     });
   } catch (err: any) {
     response.status(500).json({ error: err.message });
