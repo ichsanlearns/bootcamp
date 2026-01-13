@@ -50,36 +50,34 @@ export async function createUser(request: Request, response: Response) {
 export async function updateUser(request: Request, response: Response) {
   const id = Number(request.params.id);
   const body = request.body;
-  const userData = (await readFile("data/users.json")) as IUser[];
 
-  const index = userData.findIndex((user) => user.id === id);
+  const updatedUserData = await db.query(
+    `
+    UPDATE users 
+    SET 
+      full_name = COALESCE($1, full_name),
+      email = COALESCE($2, email)
+    WHERE id = $3
+    RETURNING *
+    `,
+    [body.full_name, body.email, id]
+  );
 
-  if (index === -1) {
+  if (updatedUserData.rowCount === 0) {
     return response
       .status(404)
-      .json({ message: `user data with id: ${id}, is not found` });
+      .json({ message: `User with id: ${id} not found` });
   }
 
-  const updatedUserData: IUser = {
-    ...(userData[index] as IUser),
-    fullName: body.fullName ?? userData[index]?.fullName,
-    age: body.age ?? userData[index]?.age,
-    gender: body.gender ?? userData[index]?.gender,
-    updatedAt: new Date(),
-  };
-
-  userData[index] = updatedUserData;
-
-  await writeFile("data/users.json", userData);
-
-  response
-    .status(200)
-    .json({ message: "User updated successfully", data: updatedUserData });
+  response.status(200).json({
+    message: "User updated successfully",
+    data: updatedUserData.rows[0],
+  });
 }
 
 // REMOVE ALL
 export async function removeAll(request: Request, response: Response) {
-  await writeFile("data/users.json", []);
+  await db.query(`DELETE FROM users`);
 
   response.status(200).json({ message: "All users deleted successfully" });
 }
@@ -87,10 +85,17 @@ export async function removeAll(request: Request, response: Response) {
 // REMOVE USER BY ID
 export async function removeUserById(request: Request, response: Response) {
   const id = Number(request.params.id);
-  const userData = (await readFile("data/users.json")) as IUser[];
-  const filteredData = userData.filter((user) => user.id !== id);
 
-  await writeFile("data/users.json", filteredData);
+  const deletedUserData = await db.query(
+    `DELETE FROM users WHERE id = $1 RETURNING *`,
+    [id]
+  );
+
+  if (deletedUserData.rowCount === 0) {
+    return response
+      .status(404)
+      .json({ message: `User with id: ${id} not found` });
+  }
 
   response
     .status(200)
