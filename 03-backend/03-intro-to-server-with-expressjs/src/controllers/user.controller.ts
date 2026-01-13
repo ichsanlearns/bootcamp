@@ -1,58 +1,48 @@
 import { type Request, type Response } from "express";
 
+import db from "../configs/db.config.ts";
+
 import { readFile, writeFile } from "../utils/io.util.ts";
 import type { IUser } from "../types/user.type.ts";
 
 // GET ALL USER
 export async function getAllUsers(request: Request, response: Response) {
-  const userData = await readFile("data/users.json");
+  const userData = await db.query(`SELECT * FROM users`);
 
-  response.status(200).json(userData);
+  response.status(200).json(userData.rows);
 }
 
 // GET SINGLE USER BY ID
 export async function getUserById(request: Request, response: Response) {
   const id = Number(request.params.id);
-  const userData = (await readFile("data/users.json")) as IUser[];
-  const filteredUserData = userData.filter((user) => user.id === id);
 
-  if (filteredUserData.length <= 0) {
-    return response
-      .status(404)
-      .json({ message: `user data with id: ${id}, is not found` });
-  }
+  const filteredUserData = await db.query(`SELECT * FROM users WHERE id = $1`, [
+    id,
+  ]);
 
-  response.status(200).json({ filteredUserData });
+  response.status(200).json({ data: filteredUserData.rows[0] });
 }
 
 // CREATE USER
 export async function createUser(request: Request, response: Response) {
   const body = request.body;
-  const userData = (await readFile("data/users.json")) as IUser[];
 
   if (!body) {
     return response.status(400).json({ message: "User data is missing" });
   }
 
-  const newUserData: IUser = {
-    id:
-      userData.length > 0
-        ? Math.max(...userData.map((user) => user.id)) + 1
-        : 1,
-    fullName: body.fullName,
-    age: body.age,
-    gender: body.gender,
-    isVerified: false,
-    createdAt: new Date(),
-    updatedAt: null,
-  };
-
-  const latestUserData = [...userData, newUserData];
-  await writeFile("data/users.json", latestUserData);
+  const newUserData = await db.query(
+    `
+    INSERT INTO users (full_name, email)
+    VALUES($1, $2)
+    RETURNING *
+    `,
+    [body.full_name, body.email]
+  );
 
   response.status(201).json({
     message: "Successfully created new user data",
-    data: newUserData,
+    data: newUserData.rows,
   });
 }
 
