@@ -183,14 +183,14 @@ app.patch("/tasks/:id", authMiddleware, async (request, response) => {
       return response.json({ message: "Title dan Kelas sama!" });
     }
 
-    await db.query(
+    const result = await db.query(
       `UPDATE tasks
       SET
-        title = $1,
-        subject = $2,
-        completed = $3,
-        teacher_name = $4,
-        class = $5,
+        title = COALESCE( $1, title),
+        subject = COALESCE( $2, subject),
+        completed = COALESCE( $3, completed),
+        teacher_name = COALESCE( $4, teacher_name),
+        class = COALESCE( $5, class),
         WHERE id = $6
       `,
       [
@@ -203,13 +203,13 @@ app.patch("/tasks/:id", authMiddleware, async (request, response) => {
       ]
     );
 
-    // if (!filteredTasks) {
-    //   response.status(400).json({ error: "Task not found" });
-    // }
+    if (result.rowCount) {
+      response.status(404).json({ error: "Task not found" });
+    }
 
     response.json({
       message: "success",
-      body: body.rows,
+      body: result.rows[0],
     });
   } catch (err: any) {
     response.status(500).json({ error: err.message });
