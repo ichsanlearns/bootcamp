@@ -8,6 +8,7 @@ import db from "../src/configs/db.config.ts";
 
 const app = express();
 const PORT: number = 8000;
+app.use(express.json());
 
 // 3. Logger Middleware
 const loggerMiddleware = (
@@ -44,8 +45,6 @@ const authMiddleware = (
     response.status(500).json({ error: err.message });
   }
 };
-
-app.use(express.json());
 
 interface ITasks {
   id: number;
@@ -126,6 +125,117 @@ app.get("/tasks/:id/details", authMiddleware, async (request, response) => {
     response.json({
       message: "success",
       body: filteredTasks.rows,
+    });
+  } catch (err: any) {
+    response.status(500).json({ error: err.message });
+  }
+});
+
+// 6. POST protected /tasks?role=teacher
+app.post("/tasks", authMiddleware, async (request, response) => {
+  try {
+    const body = request.body;
+    const addedTask = await db.query(
+      `SELECT * FROM tasks 
+      WHERE title = $1 AND class = $2
+      `,
+      [body.title, body.class]
+    );
+
+    if (addedTask.rows.length > 0) {
+      return response.json({ message: "Title dan Kelas tersebut sudah ada" });
+    }
+
+    await db.query(
+      `INSERT INTO tasks(title, subject, completed, teacher_name, class)
+                    VALUES ($1, $2, $3, $4, $5)`,
+      [body.title, body.subject, body.completed, body.teacher_name, body.class]
+    );
+
+    // if (!filteredTasks) {
+    //   response.status(400).json({ error: "Task not found" });
+    // }
+
+    response.json({
+      message: "success",
+      body: body.rows,
+    });
+  } catch (err: any) {
+    response.status(500).json({ error: err.message });
+  }
+});
+
+// 7. PATCH protected /tasks?role=teacher
+app.patch("/tasks/:id", authMiddleware, async (request, response) => {
+  try {
+    const id = Number(request.params.id);
+    const body = request.body;
+    const addedTask = await db.query(
+      `SELECT * FROM tasks 
+      WHERE title = $1 AND class = $2 AND id != $3
+      `,
+      [body.title, body.class, id]
+    );
+
+    console.info(addedTask.rows);
+
+    if (addedTask.rows.length > 0) {
+      return response.json({ message: "Title dan Kelas sama!" });
+    }
+
+    await db.query(
+      `UPDATE tasks
+      SET
+        title = $1,
+        subject = $2,
+        completed = $3,
+        teacher_name = $4,
+        class = $5,
+        WHERE id = $6
+      `,
+      [
+        body.title,
+        body.subject,
+        body.completed,
+        body.teacher_name,
+        body.class,
+        id,
+      ]
+    );
+
+    // if (!filteredTasks) {
+    //   response.status(400).json({ error: "Task not found" });
+    // }
+
+    response.json({
+      message: "success",
+      body: body.rows,
+    });
+  } catch (err: any) {
+    response.status(500).json({ error: err.message });
+  }
+});
+
+// 8. DELETE protected /tasks/:id?role=teacher
+app.delete("/tasks/:id", authMiddleware, async (request, response) => {
+  try {
+    const id = Number(request.params.id);
+    const deletedTasks = await db.query(
+      `
+      DELETE FROM tasks
+      WHERE
+        id = $1 RETURNING *
+      `,
+      [id]
+    );
+
+    if (deletedTasks.rows.length === 0) {
+      return response.json({ message: "Data tidak ada" });
+    }
+
+    response.json({
+      message: "success",
+      body: deletedTasks.rows,
     });
   } catch (err: any) {
     response.status(500).json({ error: err.message });
