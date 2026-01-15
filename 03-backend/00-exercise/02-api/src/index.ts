@@ -170,40 +170,71 @@ app.patch("/tasks/:id", authMiddleware, async (request, response) => {
   try {
     const id = Number(request.params.id);
     const body = request.body;
-    const addedTask = await db.query(
-      `SELECT * FROM tasks 
-      WHERE title = $1 AND class = $2 AND id != $3
-      `,
-      [body.title, body.class, id]
-    );
+    const fields = [];
+    const values = [];
+    let idx = 1;
 
-    console.info(addedTask.rows);
-
-    if (addedTask.rows.length > 0) {
-      return response.json({ message: "Title dan Kelas sama!" });
+    if (body.title !== undefined) {
+      fields.push(`title = $${idx++}`);
+      values.push(body.title);
+    }
+    if (body.subject !== undefined) {
+      fields.push(`subject = $${idx++}`);
+      values.push(body.subject);
+    }
+    if (body.completed !== undefined) {
+      fields.push(`completed = $${idx++}`);
+      values.push(body.completed);
+    }
+    if (body.teacher_name !== undefined) {
+      fields.push(`teacher_name = $${idx++}`);
+      values.push(body.teacher_name);
+    }
+    if (body.class !== undefined) {
+      fields.push(`class = $${idx++}`);
+      values.push(body.class);
     }
 
     const result = await db.query(
-      `UPDATE tasks
-      SET
-        title = COALESCE( $1, title),
-        subject = COALESCE( $2, subject),
-        completed = COALESCE( $3, completed),
-        teacher_name = COALESCE( $4, teacher_name),
-        class = COALESCE( $5, class),
-        WHERE id = $6
-      `,
-      [
-        body.title,
-        body.subject,
-        body.completed,
-        body.teacher_name,
-        body.class,
-        id,
-      ]
+      `UPDATE tasks SET ${fields.join(", ")} WHERE id = $${idx} RETURNING *`,
+      [...values, id]
     );
 
-    if (result.rowCount) {
+    // const addedTask = await db.query(
+    //   `SELECT * FROM tasks
+    //   WHERE title = $1 AND class = $2 AND id != $3
+    //   `,
+    //   [body.title, body.class, id]
+    // );
+
+    // console.info(addedTask.rows);
+
+    // if (addedTask.rows.length > 0) {
+    //   return response.json({ message: "Title dan Kelas sama!" });
+    // }
+
+    // const result = await db.query(
+    //   `UPDATE tasks
+    //   SET
+    //     title = COALESCE( $1, title),
+    //     subject = COALESCE( $2, subject),
+    //     completed = COALESCE( $3, completed),
+    //     teacher_name = COALESCE( $4, teacher_name),
+    //     class = COALESCE( $5, class)
+    //     WHERE id = $6
+    //     RETURNING *
+    //   `,
+    //   [
+    //     body.title ?? null,
+    //     body.subject ?? null,
+    //     body.completed ?? null,
+    //     body.teacher_name ?? null,
+    //     body.class ?? null,
+    //     id,
+    //   ]
+    // );
+
+    if (result.rowCount === 0) {
       response.status(404).json({ error: "Task not found" });
     }
 
