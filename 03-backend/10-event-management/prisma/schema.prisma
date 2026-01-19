@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  CUSTOMER
+  EVENT_ORGANIZER
+}
+
+enum OrderStatus {
+  WAITING_PAYMENT
+  WAITING_ADMIN_CONFIRMATION
+  DONE
+  REJECTED
+  EXPIRED
+  CANCELED
+}
+
+model User {
+  id        Int    @id @default(autoincrement())
+  name      String
+  email     String @unique
+  password  String
+  role      Role
+  
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? 
+
+  Orders Order[]
+
+  @@map("users")
+}
+
+model Event {
+  id          Int    @id @default(autoincrement())
+  name        String @unique
+  description String
+  location    String
+
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  Orders Order[]
+
+  @@map("events")
+}
+
+model Order {
+  id          Int     @id @default(autoincrement())
+  customerId  Int     
+  eventId     Int
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relation (Customer adalah namanya saja/bisa beda)
+  Customer User   @relation(fields: [customerId], references: [id])
+  Event    Event  @relation(fields: [eventId], references: [id])
+
+  @@map("orders")
+}
