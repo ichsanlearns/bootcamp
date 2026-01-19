@@ -1,10 +1,5 @@
 import { prisma } from "../lib/prisma.lib.js";
-
-interface IUserData {
-  name: string;
-  email: string;
-  password: string;
-}
+import { IUserData } from "../types/index.js";
 
 export async function create(userData: IUserData) {
   await prisma.user.create({

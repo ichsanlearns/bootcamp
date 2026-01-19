@@ -1,4 +1,5 @@
 import { prisma } from "../lib/prisma.lib.js";
+import { IUserData } from "../types/index.js";
 
 export async function getAll() {
   return await prisma.user.findMany({
@@ -16,5 +17,12 @@ export async function getById(id: string) {
       name: true,
       email: true,
     },
+  });
+}
+
+export async function getUserPost(id: string) {
+  return await prisma.post.findMany({
+    where: { authorId: id },
+    select: { title: true, content: true, imageUrl: true, authorId: true },
   });
 }
