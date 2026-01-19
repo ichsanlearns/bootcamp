@@ -1,5 +1,9 @@
 # README
 
+1. `npm init --y`
+2. `npx tsx init`
+3. `npx prisma init`
+
 ## Dependencies List
 
 ### Reguler Dependencies
