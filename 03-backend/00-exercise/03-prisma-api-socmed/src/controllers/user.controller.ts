@@ -1,5 +1,10 @@
 import { type Request, type Response } from "express";
-import { getAll, getById, getUserPost } from "../services/user.service.js";
+import {
+  getAll,
+  getById,
+  getUserPost,
+  updateUserById,
+} from "../services/user.service.js";
 
 export async function allUsers(req: Request, res: Response) {
   const allUsers = await getAll();
@@ -38,4 +43,20 @@ export async function showUserPost(req: Request, res: Response) {
   }
 
   res.status(200).json({ userPostById });
+}
+
+export async function changeUserById(req: Request, res: Response) {
+  const id = req.params.id;
+  const userDataUpdate = req.body;
+
+  if (!id || Array.isArray(id)) {
+    return res.status(400).json({ message: "Invalid or missing ID" });
+  }
+
+  const updatedUser = await updateUserById(id, userDataUpdate);
+
+  return res.status(200).json({
+    message: "User updated successfully",
+    data: updatedUser,
+  });
 }

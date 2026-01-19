@@ -4,6 +4,7 @@ import {
   createPost,
   getAllPost,
   getPostById,
+  updatePostById,
 } from "../services/post.service.js";
 
 export async function newPost(req: Request, res: Response) {
@@ -38,4 +39,20 @@ export async function showPostById(req: Request, res: Response) {
   }
 
   res.status(200).json({ postById });
+}
+
+export async function changePostById(req: Request, res: Response) {
+  const id = req.params.id;
+  const postDataUpdate = req.body;
+
+  if (!id || Array.isArray(id)) {
+    return res.status(400).json({ message: "Invalid or missing ID" });
+  }
+
+  const updatedPost = await updatePostById(id, postDataUpdate);
+
+  return res.status(200).json({
+    message: "Post updated successfully",
+    data: updatedPost,
+  });
 }
