@@ -7,11 +7,14 @@ import express, {
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
 import postRoutes from "./routes/post.route.js";
+import { loggerMiddleware } from "./middlewares/logger.middleware.js";
 
 const app: Application = express();
 const PORT: number = 8000;
 
 app.use(express.json());
+
+app.use(loggerMiddleware);
 
 app.get("/api/status", (req: Request, res: Response) => {
   res
