@@ -23,7 +23,7 @@ async function assertUser(id: number) {
 
 export async function getAll(query: { page?: number; limit?: number }) {
   const page = Math.max(Number(query.page) || 1, 1);
-  const limit = Math.min(Math.max(Number(query.limit) || 10, 10), 1);
+  const limit = Math.min(Math.max(Number(query.limit) || 10, 1), 10);
   const skip = (page - 1) * limit;
 
   const result = await prisma.user.findMany({
