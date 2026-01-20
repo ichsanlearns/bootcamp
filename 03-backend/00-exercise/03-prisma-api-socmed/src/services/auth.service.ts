@@ -1,20 +1,30 @@
 import { prisma } from "../lib/prisma.lib.js";
-import { IUserData } from "../types/index.js";
+import { CreateUserInput, IUserData } from "../types/index.js";
 
-export async function create(userData: IUserData) {
-  await prisma.user.create({
+export async function create(data: CreateUserInput) {
+  const existingUser = await prisma.user.findUnique({
+    where: { email: data.email },
+  });
+
+  if (existingUser) {
+    throw new Error("Email already exists");
+  }
+
+  const user = await prisma.user.create({
     data: {
-      name: userData.name,
-      email: userData.email,
-      password: userData.password,
+      name: data.name,
+      email: data.email,
+      password: data.password,
     },
   });
+
+  return user;
 }
 
-export async function get(userData: IUserData) {
+export async function get(email: string) {
   return await prisma.user.findUnique({
     where: {
-      email: userData.email,
+      email: email,
     },
   });
 }

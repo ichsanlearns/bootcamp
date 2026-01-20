@@ -1,5 +1,5 @@
 import { prisma } from "../lib/prisma.lib.js";
-import { IUserData } from "../types/index.js";
+import { IUpdateUserData, IUserData } from "../types/index.js";
 
 export async function getAll() {
   return await prisma.user.findMany({
@@ -22,15 +22,18 @@ export async function getById(id: string) {
   });
 }
 
-export async function updateUserById(id: string, userData: IUserData) {
-  const data: Partial<IUserData> = {};
-  if (userData.name !== undefined) data.name = userData.name;
-  if (userData.email !== undefined) data.email = userData.email;
-  if (userData.password !== undefined) data.password = userData.password;
-
-  await prisma.user.update({
+export async function updateUserById(id: string, userData: IUpdateUserData) {
+  const user = await prisma.user.findUnique({
     where: { id },
-    data: data,
+  });
+
+  if (!user) {
+    return null;
+  }
+
+  return await prisma.user.update({
+    where: { id },
+    data: userData,
   });
 }
 

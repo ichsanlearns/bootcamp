@@ -1,5 +1,5 @@
 import { prisma } from "../lib/prisma.lib.js";
-import { IPost } from "../types/index.js";
+import { IPost, IUpdatePost } from "../types/index.js";
 
 export async function createPost(postData: IPost) {
   await prisma.post.create({
@@ -37,14 +37,17 @@ export async function getPostById(id: string) {
   });
 }
 
-export async function updatePostById(id: string, postData: IPost) {
-  const data: Partial<IPost> = {};
-  if (postData.title !== undefined) data.title = postData.title;
-  if (postData.content !== undefined) data.content = postData.content;
-  if (postData.imageUrl !== undefined) data.imageUrl = postData.imageUrl;
-
-  await prisma.post.update({
+export async function updatePostById(id: string, postData: IUpdatePost) {
+  const post = await prisma.post.findUnique({
     where: { id },
-    data: data,
+  });
+
+  if (!post) {
+    return null;
+  }
+
+  return await prisma.post.update({
+    where: { id },
+    data: postData,
   });
 }

@@ -9,8 +9,7 @@ import {
 const router = express.Router();
 
 router.route("/").get(allUsers);
-router.route("/:id").get(getUserById);
-router.route("/:id").put(changeUserById);
+router.route("/:id").get(getUserById).put(changeUserById);
 router.route("/:id/posts").get(showUserPost);
 
 export default router;
