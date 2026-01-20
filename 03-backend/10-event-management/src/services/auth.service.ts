@@ -18,9 +18,3 @@ export async function create(userData: IuserData) {
     },
   });
 }
-
-export async function get() {}
-
-export async function update() {}
-
-export async function remove() {}

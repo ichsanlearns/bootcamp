@@ -39,12 +39,14 @@ model User {
   deletedAt DateTime? 
 
   Orders Order[]
+  Events Event[]
 
   @@map("users")
 }
 
 model Event {
   id          Int    @id @default(autoincrement())
+  eventOrganizerId Int
   name        String @unique
   description String
   location    String
@@ -55,6 +57,8 @@ model Event {
   updatedAt   DateTime @updatedAt
   deletedAt   DateTime?
 
+  EventOrganizer User @relation(fields: [eventOrganizerId], references: [id])
+  
   Orders Order[]
 
   @@map("events")
