@@ -1,45 +1,41 @@
 import { type Request, type Response } from "express";
 
 import { create, get } from "../services/auth.service.js";
+import { catchAsync } from "../utils/catchAsync.util.js";
+import { AppError } from "../utils/error.util.js";
 
-export async function register(req: Request, res: Response) {
-  try {
-    const { name, email, password } = req.body;
+export const register = catchAsync(async (req: Request, res: Response) => {
+  const { name, email, password } = req.body;
 
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: "Missing required fields" });
-    }
-
-    await create({ name, email, password });
-
-    res.status(201).json({ message: "User created" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+  if (!name || !email || !password) {
+    // return res.status(400).json({ message: "Missing required fields" });
+    throw new AppError("Missing required Fields", 400);
   }
-}
 
-export async function login(req: Request, res: Response) {
-  try {
-    const { email, password } = req.body;
+  await create({ name, email, password });
 
-    if (!email || !password) {
-      return res.status(400).json({ message: "Missing email or password" });
-    }
+  res.status(201).json({ message: "User created" });
+});
 
-    const user = await get(email);
+export const login = catchAsync(async (req: Request, res: Response) => {
+  const { email, password } = req.body;
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    if (user.password !== password) {
-      return res.status(400).json({ message: "Wrong password" });
-    }
-
-    res.status(200).json({ message: "Login success" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+  if (!email || !password) {
+    // return res.status(400).json({ message: "Missing email or password" });
+    throw new AppError("Missing email or password", 400);
   }
-}
+
+  const user = await get(email);
+
+  if (!user) {
+    // return res.status(404).json({ message: "User not found" });
+    throw new AppError("User not found", 404);
+  }
+
+  if (user.password !== password) {
+    // return res.status(400).json({ message: "Wrong password" });
+    throw new AppError("Invalid email or password", 400);
+  }
+
+  res.status(200).json({ message: "Login success" });
+});
