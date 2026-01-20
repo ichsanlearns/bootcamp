@@ -1,7 +1,7 @@
 import { prisma } from "../lib/prisma.lib.js";
-import { CreateUserInput, IUserData } from "../types/index.js";
+import { IUserData } from "../types/index.js";
 
-export async function create(data: CreateUserInput) {
+export async function create(data: IUserData) {
   const existingUser = await prisma.user.findUnique({
     where: { email: data.email },
   });

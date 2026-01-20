@@ -1,6 +1,7 @@
 import { type Request, type Response } from "express";
 
 import { create, get } from "../services/auth.service.js";
+
 import { catchAsync } from "../utils/catchAsync.util.js";
 import { AppError } from "../utils/error.util.js";
 

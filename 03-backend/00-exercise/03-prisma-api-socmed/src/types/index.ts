@@ -23,9 +23,3 @@ export interface IUpdatePost {
   imageUrl?: string;
   authorId?: string;
 }
-
-export type CreateUserInput = {
-  name: string;
-  email: string;
-  password: string;
-};

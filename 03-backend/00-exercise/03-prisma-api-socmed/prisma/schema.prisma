@@ -23,18 +23,34 @@ model User {
   updatedAt DateTime @updatedAt
 
   Posts Post[]
+  Comments CommentPost[]
 
   @@map("users")
 }
 
 model Post {
-  id        String  @id @default(uuid())
-  title     String
-  content   String
-  imageUrl  String?
-  authorId  String
+  id            String  @id @default(uuid())
+  title         String
+  content       String
+  imageUrl      String?
+  total_comment Int     @default(0)
+  authorId      String
 
   author User @relation(fields: [authorId], references: [id])
 
+  Comment CommentPost[]
+
   @@map("posts")
+}
+
+model CommentPost{
+  id        String @id @default(uuid())
+  message   String
+  author_id String
+  post_id   String
+
+  Author User @relation(fields: [author_id], references: [id])
+  Post Post @relation(fields: [post_id], references: [id])
+
+  @@map("comment_posts")
 }

@@ -8,9 +8,11 @@ import express, {
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
 import postRoutes from "./routes/post.route.js";
+import commentRoutes from "./routes/comment.route.js";
+
 import { loggerMiddleware } from "./middlewares/logger.middleware.js";
 import { globalErrorHandler } from "./middlewares/error.middleware.js";
-import { AppError } from "./utils/error.util.js";
+import { notFound } from "./middlewares/notfound.middleware.js";
 
 const app: Application = express();
 const PORT: number = 8000;
@@ -28,16 +30,9 @@ app.get("/api/status", (req: Request, res: Response) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/posts/:postId/comment", commentRoutes);
 
-app.use((req, res, next) => {
-  next(
-    new AppError(
-      `Route ${req.method} ${req.originalUrl} does not exist on this server`,
-      404,
-    ),
-  );
-});
-
+app.use(notFound);
 app.use(globalErrorHandler);
 
 app.listen(PORT, () => console.info(`Server is listening on port: ${PORT}`));
