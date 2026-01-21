@@ -1,7 +1,5 @@
 import "dotenv/config";
 
-import { Role } from "../generated/prisma/enums.js";
-
 import { PrismaClient } from "../generated/prisma/client.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 
