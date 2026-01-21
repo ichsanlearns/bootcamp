@@ -1,30 +1,19 @@
-import { prisma } from "../lib/prisma.lib.js";
 import { IUserData } from "../types/index.js";
+import * as authRepositories from "../repositories/auth.repository.js";
+import * as userRepositories from "../repositories/user.repository.js";
 
 export async function create(data: IUserData) {
-  const existingUser = await prisma.user.findUnique({
-    where: { email: data.email },
-  });
+  const existingUser = await userRepositories.existsByEmail(data.email);
 
   if (existingUser) {
     throw new Error("Email already exists");
   }
 
-  const user = await prisma.user.create({
-    data: {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-    },
-  });
+  const user = await authRepositories.create(data);
 
   return user;
 }
 
 export async function get(email: string) {
-  return await prisma.user.findUnique({
-    where: {
-      email: email,
-    },
-  });
+  return await userRepositories.existsByEmail(email);
 }

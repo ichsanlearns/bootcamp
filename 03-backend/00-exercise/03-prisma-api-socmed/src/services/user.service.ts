@@ -1,45 +1,25 @@
-import { prisma } from "../lib/prisma.lib.js";
 import { IUpdateUserData, IUserData } from "../types/index.js";
+import * as userRepositories from "../repositories/user.repository.js";
+import { userPosts } from "../repositories/post.repository.js";
 
 export async function getAll() {
-  return await prisma.user.findMany({
-    select: {
-      id: true,
-      name: true,
-      email: true,
-    },
-  });
+  return await userRepositories.getAll();
 }
 
 export async function getById(id: string) {
-  return await prisma.user.findUnique({
-    where: { id },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-    },
-  });
+  return await userRepositories.existsById(id);
 }
 
 export async function updateUserById(id: string, userData: IUpdateUserData) {
-  const user = await prisma.user.findUnique({
-    where: { id },
-  });
+  const user = await userRepositories.existsById(id);
 
   if (!user) {
     return null;
   }
 
-  return await prisma.user.update({
-    where: { id },
-    data: userData,
-  });
+  return await userRepositories.update(id, userData);
 }
 
 export async function getUserPost(id: string) {
-  return await prisma.post.findMany({
-    where: { authorId: id },
-    select: { title: true, content: true, imageUrl: true, authorId: true },
-  });
+  return await userPosts(id);
 }

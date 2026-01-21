@@ -1,53 +1,24 @@
-import { prisma } from "../lib/prisma.lib.js";
 import { IPost, IUpdatePost } from "../types/index.js";
+import * as postRepositories from "../repositories/post.repository.js";
 
 export async function createPost(postData: IPost) {
-  await prisma.post.create({
-    data: {
-      title: postData.title,
-      content: postData.content,
-      imageUrl: postData.imageUrl ?? null,
-      authorId: postData.authorId,
-    },
-  });
+  await postRepositories.create(postData);
 }
 
 export async function getAllPost() {
-  return await prisma.post.findMany({
-    select: {
-      id: true,
-      title: true,
-      content: true,
-      imageUrl: true,
-      authorId: true,
-    },
-  });
+  return await postRepositories.getAll();
 }
 
 export async function getPostById(id: string) {
-  return await prisma.post.findUnique({
-    where: { id },
-    select: {
-      id: true,
-      title: true,
-      content: true,
-      imageUrl: true,
-      authorId: true,
-    },
-  });
+  return await postRepositories.existById(id);
 }
 
 export async function updatePostById(id: string, postData: IUpdatePost) {
-  const post = await prisma.post.findUnique({
-    where: { id },
-  });
+  const post = await postRepositories.existById(id);
 
   if (!post) {
     return null;
   }
 
-  return await prisma.post.update({
-    where: { id },
-    data: postData,
-  });
+  return await postRepositories.update(id, postData);
 }

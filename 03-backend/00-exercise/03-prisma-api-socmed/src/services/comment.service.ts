@@ -5,7 +5,7 @@ import * as userRepositories from "../repositories/user.repository.js";
 import { AppError } from "../utils/error.util.js";
 
 export async function create(message: string, postId: string, userId: string) {
-  if (!(await postRepositories.existsById(postId))) {
+  if (!(await postRepositories.existEmailsById(postId))) {
     throw new AppError("Post not found", 404);
   }
 
