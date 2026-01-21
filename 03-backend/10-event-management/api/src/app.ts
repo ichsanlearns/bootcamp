@@ -4,6 +4,8 @@ import express, {
   type Response,
 } from "express";
 
+import cors from "cors";
+
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
 
@@ -11,6 +13,7 @@ const app: Application = express();
 const PORT: number = 8000;
 
 app.use(express.json());
+app.use(cors({ origin: "http://localhost:5173" }));
 
 app.get("/api/status", (req: Request, res: Response) => {
   res
@@ -22,3 +25,5 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 
 app.listen(PORT, () => console.info(`Server is listening on port: ${PORT}`));
+
+export default app;

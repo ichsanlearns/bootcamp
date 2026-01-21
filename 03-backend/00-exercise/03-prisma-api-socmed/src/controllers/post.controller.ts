@@ -43,7 +43,7 @@ export async function showAllPost(req: Request, res: Response) {
 
 export async function showPostById(req: Request, res: Response) {
   try {
-    const { id } = req.params;
+    const id = req.params.id;
 
     if (!id || Array.isArray(id)) {
       return res.status(400).json({ message: "Invalid or missing ID" });
