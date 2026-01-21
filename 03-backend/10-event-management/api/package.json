@@ -1,10 +1,11 @@
 {
   "name": "10-event-management",
   "scripts": {
-    "build": "prisma generate && tsc",
-    "dev": "prisma generate && tsx --watch src/app.ts",
-    "seed": "prisma generate && tsx prisma/seed.ts",
-    "start": "npm run build && node dist/src/app.js"
+    "build": "tsc",
+    "dev": "tsx --watch src/app.ts",
+    "seed": "tsx prisma/seed.ts",
+    "start": "npm run build && node dist/src/app.js",
+    "postinstall": "prisma generate"
   },
   "type": "module",
   "dependencies": {
