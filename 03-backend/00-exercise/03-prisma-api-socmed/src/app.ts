@@ -30,7 +30,7 @@ app.get("/api/status", (req: Request, res: Response) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
-app.use("/api/posts/:postId/comment", commentRoutes);
+// app.use("/api/posts/:postId/comment", commentRoutes);
 
 app.use(notFound);
 app.use(globalErrorHandler);
