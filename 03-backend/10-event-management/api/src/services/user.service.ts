@@ -7,18 +7,52 @@ interface IUpdateUserInput {
   password?: string;
 }
 
+interface CreateUserInput {
+  name: string;
+  email: string;
+  password: string;
+  role: Role;
+}
+
 function assertId(id: number) {
   if (!Number.isInteger(id) || id <= 0) {
     throw new Error("Invalid user id");
   }
 }
 
-async function assertUser(id: number) {
-  const user = await prisma.user.findUnique({ where: { id } });
+export async function assertUser({
+  id,
+  email,
+}: {
+  id?: number;
+  email?: string;
+}) {
+  let user;
+
+  if (id) {
+    user = await prisma.user.findUnique({ where: { id } });
+  } else if (email) {
+    user = await prisma.user.findUnique({ where: { email } });
+  }
 
   if (!user || user.deletedAt) {
     throw new Error("User not found");
   }
+
+  return user;
+}
+
+export async function create(data: CreateUserInput) {
+  const result = await prisma.user.create({
+    data: {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      role: data.role,
+    },
+  });
+
+  return result;
 }
 
 export async function getAll(query: { page?: number; limit?: number }) {
@@ -70,7 +104,7 @@ export async function update(id: number, data: IUpdateUserInput) {
   }
 
   try {
-    assertUser(id);
+    assertUser({ id });
 
     const result = await prisma.user.update({
       where: { id },
@@ -88,7 +122,7 @@ export async function softDeleteById(id: number) {
   assertId(id);
 
   try {
-    assertUser(id);
+    assertUser({ id });
     const result = await prisma.user.update({
       where: { id },
       data: { deletedAt: new Date() },
