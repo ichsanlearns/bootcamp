@@ -50,6 +50,8 @@ export async function create(data: CreateUserInput) {
       password: data.password,
       role: data.role,
     },
+    // omit: { password: true },
+    select: { name: true, role: true },
   });
 
   return result;

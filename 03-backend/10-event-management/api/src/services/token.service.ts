@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 function getJWTSecret() {
-  let jwtSecret = process.env.JWT_ACCESS_SECRET;
+  let jwtSecret = process.env.JWT_SECRET;
 
   if (!jwtSecret) {
     throw new Error("JWT secret not found");
@@ -13,7 +13,7 @@ function getJWTSecret() {
 export async function generateAccessToken(payload: {}) {
   const jwtSecret = getJWTSecret();
 
-  return jwt.sign(payload, jwtSecret, { expiresIn: "5m" });
+  return jwt.sign(payload, jwtSecret, { expiresIn: "1h" });
 }
 
 export async function verifyToken(token: string) {

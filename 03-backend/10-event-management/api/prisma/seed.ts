@@ -1,4 +1,6 @@
 import { prisma } from "./../src/lib/prisma.lib.js";
+import bcrypt from "bcryptjs";
+
 import { Role, type User } from "../src/generated/prisma/client.js";
 import { faker } from "@faker-js/faker";
 
@@ -137,19 +139,23 @@ async function seed() {
     console.info("All old data has been deleted 🗑️");
 
     /* ----------------------------- Create new data ---------------------------- */
-    const customers = Array.from({ length: 15 }).map((element) => ({
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-      role: Role.CUSTOMER,
-    }));
+    const customers = await Promise.all(
+      Array.from({ length: 15 }).map(async () => ({
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: await bcrypt.hash("purwadhika123", 10),
+        role: Role.CUSTOMER,
+      })),
+    );
 
-    const eventOrganizers = Array.from({ length: 15 }).map((element) => ({
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-      role: Role.EVENT_ORGANIZER,
-    }));
+    const eventOrganizers = await Promise.all(
+      Array.from({ length: 15 }).map(async () => ({
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: await bcrypt.hash("purwadhika123", 10),
+        role: Role.EVENT_ORGANIZER,
+      })),
+    );
 
     await prisma.user.createMany({ data: [...customers, ...eventOrganizers] });
 

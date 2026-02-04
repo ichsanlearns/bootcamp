@@ -3,14 +3,15 @@ import { type Request, type Response } from "express";
 import { assertUser, create } from "../services/user.service.js";
 import { comparePassword, hashPassword } from "../services/auth.service.js";
 import { generateAccessToken } from "../services/token.service.js";
+import { prisma } from "../lib/prisma.lib.js";
 
 export async function register(req: Request, res: Response) {
   const { name, email, password, role } = req.body;
 
-  const existingUser = await assertUser({ email });
+  const existingUser = await prisma.user.findUnique({ where: { email } });
 
   if (existingUser) {
-    res.status(400).json({ message: "email already used" });
+    return res.status(400).json({ message: "email already used" });
   }
 
   const hashedPassword = await hashPassword(password);
@@ -28,7 +29,7 @@ export async function login(req: Request, res: Response) {
   const isValid = await comparePassword(password, user.password);
 
   if (!isValid) {
-    res.status(400).json({ message: "Invalid credentials" });
+    return res.status(400).json({ message: "Invalid credentials" });
   }
 
   const accessToken = await generateAccessToken(user);
