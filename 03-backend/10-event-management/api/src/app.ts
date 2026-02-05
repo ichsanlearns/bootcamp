@@ -11,6 +11,7 @@ import cors from "cors";
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
 import eventRoutes from "./routes/event.route.js";
+import imageRoutes from "./routes/image.router.js";
 
 const app: Application = express();
 const PORT: number = 8000;
@@ -27,6 +28,7 @@ app.get("/api/status", (req: Request, res: Response) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/events", eventRoutes);
+app.use("/api/images", imageRoutes);
 
 app.listen(PORT, () => console.info(`Server is listening on port: ${PORT}`));
 

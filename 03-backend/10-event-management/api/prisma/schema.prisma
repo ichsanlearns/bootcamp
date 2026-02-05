@@ -78,3 +78,10 @@ model Order {
 
   @@map("orders")
 }
+
+model Image {
+  id Int @id @default(autoincrement())
+  url String
+
+  @@map("images")
+}
