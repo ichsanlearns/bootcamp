@@ -1,24 +1,32 @@
-import { type Request, type Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 
 import { assertUser, create } from "../services/user.service.js";
 import { comparePassword, hashPassword } from "../services/auth.service.js";
 import { generateAccessToken } from "../services/token.service.js";
 import { prisma } from "../lib/prisma.lib.js";
 
-export async function register(req: Request, res: Response) {
-  const { name, email, password, role } = req.body;
+export async function register(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { name, email, password, role } = req.body;
 
-  const existingUser = await prisma.user.findUnique({ where: { email } });
+    const existingUser = await prisma.user.findUnique({ where: { email } });
 
-  if (existingUser) {
-    return res.status(400).json({ message: "email already used" });
+    if (existingUser) {
+      return res.status(400).json({ message: "email already used" });
+    }
+
+    const hashedPassword = await hashPassword(password);
+
+    const user = await create({ name, email, role, password: hashedPassword });
+
+    res.status(201).json({ message: "User created", user });
+  } catch (error) {
+    next(error);
   }
-
-  const hashedPassword = await hashPassword(password);
-
-  const user = await create({ name, email, role, password: hashedPassword });
-
-  res.status(201).json({ message: "User created", user });
 }
 
 export async function login(req: Request, res: Response) {

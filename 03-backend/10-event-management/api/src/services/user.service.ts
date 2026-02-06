@@ -1,5 +1,7 @@
 import { Role } from "../generated/prisma/enums.js";
 import { prisma } from "../lib/prisma.lib.js";
+import { sendEmail } from "../utils/mail.util.js";
+import { compileTemplate } from "../utils/mail.util.js";
 
 interface IUpdateUserInput {
   name?: string;
@@ -43,18 +45,33 @@ export async function assertUser({
 }
 
 export async function create(data: CreateUserInput) {
-  const result = await prisma.user.create({
-    data: {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-      role: data.role,
-    },
-    // omit: { password: true },
-    select: { name: true, role: true },
-  });
+  try {
+    const result = await prisma.user.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        role: data.role,
+      },
+      // omit: { password: true },
+      select: { name: true, email: true, role: true },
+    });
 
-  return result;
+    const html = await compileTemplate("welcome-mail.template", {
+      name: result.name,
+    });
+
+    await sendEmail({
+      from: "Funevent <onboarding@purwadhika.my.id>",
+      email: result.email,
+      subject: `Welcome to Funevent 🎉`,
+      html,
+    });
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export async function getAll(query: { page?: number; limit?: number }) {
