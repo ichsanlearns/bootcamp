@@ -8,10 +8,23 @@ import {
   softDeleteById,
   update,
 } from "../services/user.service.js";
+import { redis } from "../lib/redis.js";
 
 export async function getAllUsers(req: Request, res: Response) {
+  const cachedUser = await redis.get("userData");
+
+  if (cachedUser) {
+    return res.status(200).json({
+      message: `User fetched from catched`,
+      data: JSON.parse(cachedUser),
+    });
+  }
+
   const allUsersData = await getAll(req.query);
-  res.status(200).json(allUsersData);
+
+  await redis.set("userData", JSON.stringify(allUsersData), "EX", 60 * 5);
+
+  res.status(200).json({ message: "User fetched from DB", data: allUsersData });
 }
 
 export async function getUserById(req: Request, res: Response) {
@@ -29,6 +42,8 @@ export async function updateUser(req: Request, res: Response) {
     const { name, email, password } = req.body;
 
     const updatedUser = await update(id, { name, email, password });
+
+    await redis.del("userData");
 
     res.status(200).json(updatedUser);
   } catch (error) {

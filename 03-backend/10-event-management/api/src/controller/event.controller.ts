@@ -32,8 +32,8 @@ export async function createEvent(
       name,
       description,
       location,
-      startDate: new Date(startDate),
-      endDate: new Date(endDate),
+      startDate: startDate,
+      endDate: endDate,
     });
     res.status(200).json({ message: "Event created", data: result });
   } catch (error) {
