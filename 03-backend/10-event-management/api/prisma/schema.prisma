@@ -68,7 +68,9 @@ model Order {
   id          Int     @id @default(autoincrement())
   customerId  Int     
   eventId     Int
+  status OrderStatus @default(WAITING_PAYMENT)
 
+  expiresAt DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
