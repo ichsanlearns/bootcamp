@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 
 import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login";
+import CreateEvent from "./pages/CreateEvent";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -16,6 +17,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/events/create" element={<CreateEvent />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
